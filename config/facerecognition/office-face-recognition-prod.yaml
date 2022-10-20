@@ -1,0 +1,4 @@
+sidecar:
+  ip: face
+  port: 3000
+  health-check-url: http://${sidecar.ip}:${sidecar.port}/health

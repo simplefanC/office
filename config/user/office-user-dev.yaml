@@ -1,0 +1,67 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      #      url: jdbc:mysql://localhost:3306/office_user?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://localhost:3306/emos?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      username: root
+      password: 123456
+      #      mysql连接数一般为CPU内核的1~2倍
+      initial-size: 8
+      max-active: 16
+      min-idle: 8
+      max-wait: 60000
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-active: 1000
+        max-wait: -1ms
+        max-idle: 16
+        min-idle: 8
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: emos
+
+  mail:
+    default-encoding: UTF-8
+    host: smtp.aliyun.com
+    username: xxx@aliyun.com
+    password: password
+
+emos:
+  jwt:
+    secret: abc123456
+    expire: 5
+    #    redis保存数据过期时间
+    cache-expire: 10
+  email:
+    system: xxx@aliyun.com
+    hr: email_address
+  oss:
+    endpoint: oss-cn-hangzhou.aliyuncs.com/
+    access-key-id: access_key_id
+    access-key-secret: access_key_secret
+    bucket-name: bucket_name
+    dir-prefix: emos/images/
+  # 自定义redis key
+  redis:
+    database: emos
+    key:
+      admin: 'ums:admin'
+      permission-set: 'ums:permissionSet'
+  wx:
+    #  app-id: wx0a0a25b6cbb0e5d2 #上课用的，但未拉入开发组，仍然不可用
+    app-id: wx_app_id
+    app-secret: wx_app_secret

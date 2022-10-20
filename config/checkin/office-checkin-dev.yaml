@@ -1,0 +1,52 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/emos?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      username: root
+      password: 123456
+      # mysql连接数一般为CPU内核的1~2倍
+      initial-size: 8
+      max-active: 16
+      min-idle: 8
+      max-wait: 60000
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+  servlet:
+    multipart:
+      max-file-size: 10MB #限制文件上传大小为10M
+
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-active: 1000
+        max-wait: -1ms
+        max-idle: 16
+        min-idle: 8
+
+  mail:
+    default-encoding: UTF-8
+    host: smtp.aliyun.com
+    username: xxx@aliyun.com
+    password: password
+
+emos:
+  jwt:
+    secret: abc123456
+    expire: 5
+    #    redis保存数据过期时间
+    cache-expire: 10
+  face:
+    createFaceModelUrl: http://localhost:5000/create_face_model
+    checkinUrl: http://localhost:5000/checkin
+  # 人脸签到
+  image-folder: D:/emos/image
+  email:
+    system: xxx@aliyun.com
+    hr: email_address

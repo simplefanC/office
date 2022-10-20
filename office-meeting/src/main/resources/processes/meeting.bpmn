@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:activiti="http://activiti.org/bpmn"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.flowable.org/processdef">
+    <process id="meeting" name="meeting" isExecutable="true">
+        <endEvent id="EndEvent_1" name="结束"/>
+        <serviceTask id="ServiceTask_1" name="发送通知" activiti:delegateExpression="${notifyService}"/>
+        <startEvent id="StartEvent_1" name="开始"/>
+        <userTask id="UserTask_1" name="创建会议" activiti:assignee="${creatorId}"/>
+        <exclusiveGateway id="ExclusiveGateway_1" name="判断创建者"/>
+        <userTask id="UserTask_2" name="部门经理审批" activiti:assignee="${managerId}"/>
+        <userTask id="UserTask_3" name="总经理审批" activiti:assignee="${gmId}"/>
+        <exclusiveGateway id="ExclusiveGateway_2" name="判断审批结果"/>
+        <sequenceFlow sourceRef="StartEvent_1" targetRef="UserTask_1" id="StartEvent_1-UserTask_1"/>
+        <sequenceFlow sourceRef="UserTask_1" targetRef="ExclusiveGateway_1" id="UserTask_1-ExclusiveGateway_1"/>
+        <sequenceFlow sourceRef="ExclusiveGateway_1" targetRef="UserTask_2" id="ExclusiveGateway_1-UserTask_2">
+            <conditionExpression>${identity!='总经理'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow sourceRef="ExclusiveGateway_1" targetRef="ServiceTask_1" id="ExclusiveGateway_1-ServiceTask_1">
+            <conditionExpression>${identity=='总经理'}</conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow sourceRef="UserTask_2" targetRef="ExclusiveGateway_2" id="UserTask_2-ExclusiveGateway_2"/>
+        <sequenceFlow sourceRef="ExclusiveGateway_2" targetRef="ServiceTask_1" id="ExclusiveGateway_2-ServiceTask_1">
+            <conditionExpression><![CDATA[${(result=='不同意'&&sameDept==false)||sameDept==true}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow sourceRef="ExclusiveGateway_2" targetRef="UserTask_3" id="ExclusiveGateway_2-UserTask_3">
+            <conditionExpression><![CDATA[${result=='同意'&&sameDept==false}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow sourceRef="ServiceTask_1" targetRef="EndEvent_1" id="ServiceTask_1-EndEvent_1"/>
+        <sequenceFlow sourceRef="UserTask_3" targetRef="ServiceTask_1" id="UserTask_3-ServiceTask_1"/>
+    </process>
+
+<!--    <bpmndi:BPMNDiagram id="BPMNDiagram_meeting">-->
+<!--        <bpmndi:BPMNPlane bpmnElement="meeting" id="BPMNPlane_meeting">-->
+<!--            <bpmndi:BPMNShape bpmnElement="StartEvent_1">-->
+<!--                <omgdc:Bounds height="48.0" width="48.0" x="68.0" y="257.0"/>-->
+<!--            </bpmndi:BPMNShape>-->
+<!--            <bpmndi:BPMNShape bpmnElement="UserTask_1">-->
+<!--                <omgdc:Bounds height="48.0" width="120.0" x="205.0" y="257.0"/>-->
+<!--            </bpmndi:BPMNShape>-->
+<!--            <bpmndi:BPMNShape bpmnElement="ExclusiveGateway_1">-->
+<!--                <omgdc:Bounds height="48.0" width="48.0" x="412.0" y="257.0"/>-->
+<!--            </bpmndi:BPMNShape>-->
+<!--            <bpmndi:BPMNShape bpmnElement="UserTask_2">-->
+<!--                <omgdc:Bounds height="48.0" width="120.0" x="542.0" y="172.0"/>-->
+<!--            </bpmndi:BPMNShape>-->
+<!--            <bpmndi:BPMNShape bpmnElement="ServiceTask_1">-->
+<!--                <omgdc:Bounds height="48.0" width="80.0" x="800.0" y="257.0"/>-->
+<!--            </bpmndi:BPMNShape>-->
+<!--            <bpmndi:BPMNShape bpmnElement="ExclusiveGateway_2">-->
+<!--                <omgdc:Bounds height="48.0" width="48.0" x="750.0" y="172.0"/>-->
+<!--            </bpmndi:BPMNShape>-->
+<!--            <bpmndi:BPMNShape bpmnElement="UserTask_3">-->
+<!--                <omgdc:Bounds height="48.0" width="120.0" x="920.0" y="172.0"/>-->
+<!--            </bpmndi:BPMNShape>-->
+<!--            <bpmndi:BPMNShape bpmnElement="EndEvent_1">-->
+<!--                <omgdc:Bounds height="48.0" width="48.0" x="815.0" y="398.0"/>-->
+<!--            </bpmndi:BPMNShape>-->
+<!--            <bpmndi:BPMNEdge bpmnElement="UserTask_1-ExclusiveGateway_1">-->
+<!--            </bpmndi:BPMNEdge>-->
+<!--            <bpmndi:BPMNEdge bpmnElement="ExclusiveGateway_1-UserTask_2">-->
+
+<!--            </bpmndi:BPMNEdge>-->
+<!--            <bpmndi:BPMNEdge bpmnElement="ExclusiveGateway_1-ServiceTask_1">-->
+
+<!--            </bpmndi:BPMNEdge>-->
+<!--            <bpmndi:BPMNEdge bpmnElement="UserTask_2-ExclusiveGateway_2">-->
+<!--            </bpmndi:BPMNEdge>-->
+<!--            <bpmndi:BPMNEdge bpmnElement="ExclusiveGateway_2-UserTask_1">-->
+<!--                <omgdi:waypoint x="775.0" y="130.0"/>-->
+<!--                <omgdi:waypoint x="500.0" y="130.0"/>-->
+<!--            </bpmndi:BPMNEdge>-->
+<!--            <bpmndi:BPMNEdge bpmnElement="ExclusiveGateway_2-ServiceTask_1">-->
+
+<!--            </bpmndi:BPMNEdge>-->
+
+
+
+<!--            <bpmndi:BPMNEdge bpmnElement="ExclusiveGateway_2-UserTask_3">-->
+<!--            </bpmndi:BPMNEdge>-->
+<!--            <bpmndi:BPMNEdge bpmnElement="ServiceTask_1-EndEvent_1">-->
+<!--            </bpmndi:BPMNEdge>-->
+<!--            <bpmndi:BPMNEdge bpmnElement="UserTask_3-ServiceTask_1">-->
+<!--                <omgdi:waypoint x="980.0" y="196.0"/>-->
+<!--                <omgdi:waypoint x="840.0" y="281.0"/>-->
+<!--            </bpmndi:BPMNEdge>-->
+<!--        </bpmndi:BPMNPlane>-->
+<!--    </bpmndi:BPMNDiagram>-->
+</definitions>

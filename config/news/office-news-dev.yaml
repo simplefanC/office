@@ -1,0 +1,6 @@
+emos:
+  jwt:
+    secret: abc123456
+    expire: 5
+    #    redis保存数据过期时间
+    cache-expire: 10

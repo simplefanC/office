@@ -1,0 +1,17 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: emos
+
+emos:
+  jwt:
+    secret: abc123456
+    expire: 5
+    #    redis保存数据过期时间
+    cache-expire: 10
+
+  rabbitmq:
+    host: localhost
+    port: 5672

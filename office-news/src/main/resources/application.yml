@@ -1,0 +1,23 @@
+server:
+  port: 8082
+spring:
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      # 抽样率默认是0.1（10% 丢弃90%数据）
+      # 为了测试方便设为1.0
+      probability: 1.0
+
+# actuator配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+  health:
+    redis:
+      enabled: false

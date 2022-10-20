@@ -1,0 +1,48 @@
+spring:
+  sleuth:
+    sampler:
+      # 抽样率默认是0.1（10% 丢弃90%数据）
+      # 为了测试方便设为1.0
+      probability: 1.0
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          # 让gateway通过服务发现组件找到其他的微服务
+          enabled: true
+      # 配置路由路径
+      routes:
+        - id: office-user
+          uri: lb://office-user
+          predicates:
+            - Path=/office-user/**,/user/**,/role/**,/dept/**
+
+        - id: office-checkin
+          uri: lb://office-checkin
+          predicates:
+            - Path=/office-checkin/**,/checkin/**,/sys/**
+
+        - id: office-meeting
+          uri: lb://office-meeting
+          predicates:
+            - Path=/office-meeting/**,/meeting/**,/workflow/**
+
+        - id: office-message
+          uri: lb://office-message
+          predicates:
+            - Path=/office-message/**,/message/**
+
+        - id: office-news
+          uri: lb://office-news
+          predicates:
+            - Path=/office-news/**,/news/**
+
+# actuator配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always

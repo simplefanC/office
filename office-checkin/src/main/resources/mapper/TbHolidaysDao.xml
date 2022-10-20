@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simplefanc.office.checkin.dao.TbHolidaysDao">
+  <select id="searchTodayIsHolidays" resultType="Integer">
+    SELECT id FROM tb_holidays WHERE date = CURRENT_DATE LIMIT 1;
+  </select>
+  <select id="searchHolidaysInRange" parameterType="HashMap" resultType="String">
+    SELECT date
+    FROM tb_holidays
+    WHERE date BETWEEN #{startDate} AND #{endDate}
+  </select>
+    <select id="searchHolidaysInMonth" resultType="java.lang.String">
+      SELECT
+        DISTINCT DATE_FORMAT( date, '%Y-%m-%d' )
+      FROM tb_holidays
+      WHERE DATE_FORMAT(date,'%Y/%c')=#{yearMonth}
+    </select>
+</mapper>

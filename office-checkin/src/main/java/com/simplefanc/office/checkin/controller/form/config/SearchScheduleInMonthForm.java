@@ -1,0 +1,17 @@
+package com.simplefanc.office.checkin.controller.form.config;
+
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
+import org.hibernate.validator.constraints.Range;
+
+/**
+ * @author chenfan
+ */
+@Data
+@ApiModel
+public class SearchScheduleInMonthForm {
+    @Range(min = 2000, max = 9999)
+    private Integer year;
+    @Range(min = 1, max = 12)
+    private Integer month;
+}
